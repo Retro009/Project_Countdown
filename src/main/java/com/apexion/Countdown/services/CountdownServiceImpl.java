@@ -7,10 +7,11 @@ import com.apexion.Countdown.models.User;
 import com.apexion.Countdown.repositories.CountdownEventRepository;
 import com.apexion.Countdown.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-
+@Service
 public class CountdownServiceImpl implements CountdownService{
     @Autowired
     CountdownEventRepository countDownRepository;
