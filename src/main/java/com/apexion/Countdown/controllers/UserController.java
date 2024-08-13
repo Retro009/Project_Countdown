@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user/v1")
+@RequestMapping("/userApi/v1")
 public class UserController {
     @Autowired
     UserService service;
