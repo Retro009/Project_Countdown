@@ -10,6 +10,8 @@ import com.apexion.Countdown.services.CountdownService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -59,4 +61,29 @@ public class CountdownController {
         return responseDto;
     }
 
+    /*@GetMapping("/userCountdownTimes/{userId}")
+    List<CountdownTime> showUserCountdownTimes(@PathVariable("userId") long userId) throws InvalidUserExceptions, ExpiredDateException, InvalidCountdownEvent {
+        List<CountdownEvent> countdownEvents = service.fetchUserCountdownEvents(userId);
+        List<CountdownTime> countdownTimes = new ArrayList<>();
+        for(CountdownEvent event: countdownEvents){
+            countdownTimes.add(new CountdownTime(event.getEventName(), service.showCountdown(event.getId())));
+        }
+        return countdownTimes;
+    }*/
+
+    @GetMapping("/userCountdownTimes")
+    ShowUserCountdownTimesResponseDto showUserCountdownTimes(@RequestBody ShowUserCountdownTimesRequestDto requestDto) {
+
+        List<CountdownEvent> countdownEvents = null;
+        List<CountdownTime> countdownTimes = new ArrayList<>();
+        try {
+            countdownEvents = service.fetchUserCountdownEvents(requestDto.userId());
+            for(CountdownEvent event: countdownEvents){
+                countdownTimes.add(new CountdownTime(event.getEventName(), service.showCountdown(event.getId())));
+            }
+            return new ShowUserCountdownTimesResponseDto(countdownTimes, ResponseStatus.SUCCESS);
+        } catch (InvalidUserExceptions | ExpiredDateException | InvalidCountdownEvent e) {
+            return new ShowUserCountdownTimesResponseDto(countdownTimes, ResponseStatus.FAILURE);
+        }
+    }
 }
